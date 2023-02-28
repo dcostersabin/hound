@@ -1,5 +1,6 @@
 use crate::FileFilter;
 use crate::Package;
+use crate::PkgJson;
 use crate::Python;
 use crate::Rust;
 
@@ -31,6 +32,7 @@ impl PackageFilePipeline {
     fn start_search(&mut self) {
         self.python();
         self.rust();
+        self.pkg_json();
     }
 
     fn python(&mut self) {
@@ -43,5 +45,11 @@ impl PackageFilePipeline {
         let mut rust_obj = Rust::new(self.file_filter.rust.clone());
         rust_obj.get_packages();
         self.packages.extend(rust_obj.packages);
+    }
+
+    fn pkg_json(&mut self) {
+        let mut pkg_json_obj = PkgJson::new(self.file_filter.package_json.clone());
+        pkg_json_obj.get_packages();
+        self.packages.extend(pkg_json_obj.packages);
     }
 }
