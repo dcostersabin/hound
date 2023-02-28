@@ -1,8 +1,7 @@
 use crate::FileFilter;
 use crate::Package;
 use crate::Python;
-use rayon::prelude::*;
-use std::sync::{Arc, Mutex};
+use crate::Rust;
 
 pub struct PackageFilePipeline {
     file_filter: FileFilter,
@@ -31,31 +30,18 @@ impl PackageFilePipeline {
     }
     fn start_search(&mut self) {
         self.python();
+        self.rust();
     }
 
     fn python(&mut self) {
-        let packages: Vec<Package> = Vec::new();
-        let shared_package = Arc::new(Mutex::new(packages));
-        self.file_filter.python.par_iter().for_each(|file| {
-            let mut py_obj = Python::new(file);
-            py_obj.get_packages();
-            let tmp_packages = shared_package.lock();
-            match tmp_packages {
-                Ok(mut tmp_packages) => {
-                    for package in py_obj.packages {
-                        tmp_packages.push(package);
-                    }
-                }
-                Err(_) => {}
-            }
-        });
+        let mut py_obj = Python::new(self.file_filter.python.clone());
+        py_obj.get_packages();
+        self.packages.extend(py_obj.packages);
+    }
 
-        let tmp_packages = shared_package.lock();
-        match tmp_packages {
-            Ok(tmp_packages) => {
-                self.packages.extend(tmp_packages.to_vec());
-            }
-            Err(_) => {}
-        }
+    fn rust(&mut self) {
+        let mut rust_obj = Rust::new(self.file_filter.rust.clone());
+        rust_obj.get_packages();
+        self.packages.extend(rust_obj.packages);
     }
 }

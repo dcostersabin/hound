@@ -11,6 +11,7 @@ mod package_file_pipeline;
 mod pip;
 mod python;
 mod rpm;
+mod rust;
 mod system_pipeline;
 
 use apk::Apk;
@@ -26,6 +27,7 @@ use package_file_pipeline::PackageFilePipeline;
 use pip::Pip;
 use python::Python;
 use rpm::Rpm;
+use rust::Rust;
 use serde_json::to_string;
 use system_pipeline::SystemPipeline;
 
