@@ -1,4 +1,26 @@
 use regex::Regex;
+use roxmltree::Node;
+
+pub fn get_children(i: Node) -> (String, String) {
+    let mut name = String::new();
+    let mut version = String::new();
+    for ele in i.descendants() {
+        if ele.tag_name().name().to_lowercase() == "version" {
+            version = ele.text().unwrap().to_string();
+            continue;
+        }
+        if ele.tag_name().name().to_lowercase() == "artifactid" {
+            name = ele.text().unwrap().to_string();
+            continue;
+        }
+
+        if !name.is_empty() & !version.is_empty() {
+            break;
+        }
+    }
+
+    return (name, version);
+}
 
 pub fn get_bundle_name(content: &str) -> String {
     let mut name = "";

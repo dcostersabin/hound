@@ -5,6 +5,7 @@ use crate::Go;
 use crate::Jar;
 use crate::Package;
 use crate::PkgJson;
+use crate::PomFiles;
 use crate::Python;
 use crate::RpmFiles;
 use crate::Rust;
@@ -45,6 +46,7 @@ impl PackageFilePipeline {
         self.dpkg();
         self.rpm();
         self.apk();
+        self.pom();
     }
 
     fn python(&mut self) {
@@ -99,5 +101,11 @@ impl PackageFilePipeline {
         let mut apk_obj = ApkFiles::new(self.file_filter.apk.clone());
         apk_obj.get_packages();
         self.packages.extend(apk_obj.packages);
+    }
+
+    fn pom(&mut self) {
+        let mut pom_obj = PomFiles::new(self.file_filter.pom.clone());
+        pom_obj.get_packages();
+        self.packages.extend(pom_obj.packages);
     }
 }
