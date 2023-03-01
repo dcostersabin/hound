@@ -1,3 +1,4 @@
+use crate::ApkFiles;
 use crate::DpkgFiles;
 use crate::FileFilter;
 use crate::Go;
@@ -43,6 +44,7 @@ impl PackageFilePipeline {
         self.jar();
         self.dpkg();
         self.rpm();
+        self.apk();
     }
 
     fn python(&mut self) {
@@ -91,5 +93,11 @@ impl PackageFilePipeline {
         let mut rpm_obj = RpmFiles::new(self.file_filter.rpm.clone());
         rpm_obj.get_packages();
         self.packages.extend(rpm_obj.packages);
+    }
+
+    fn apk(&mut self) {
+        let mut apk_obj = ApkFiles::new(self.file_filter.apk.clone());
+        apk_obj.get_packages();
+        self.packages.extend(apk_obj.packages);
     }
 }

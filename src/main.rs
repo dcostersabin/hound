@@ -1,5 +1,6 @@
 extern crate clap;
 mod apk;
+mod apk_files;
 mod arch;
 mod composer;
 mod dpkg;
@@ -22,6 +23,7 @@ mod utils;
 mod yarn;
 
 use apk::Apk;
+use apk_files::ApkFiles;
 use arch::Arch;
 use clap::{Args, Parser, Subcommand};
 use composer::Composer;
