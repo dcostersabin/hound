@@ -1,3 +1,4 @@
+use crate::DpkgFiles;
 use crate::FileFilter;
 use crate::Go;
 use crate::Jar;
@@ -39,6 +40,7 @@ impl PackageFilePipeline {
         self.yarn();
         self.go();
         self.jar();
+        self.dpkg();
     }
 
     fn python(&mut self) {
@@ -75,5 +77,11 @@ impl PackageFilePipeline {
         let mut jar_obj = Jar::new(self.file_filter.jar.clone());
         jar_obj.get_packages();
         self.packages.extend(jar_obj.packages);
+    }
+
+    fn dpkg(&mut self) {
+        let mut dpkg_obj = DpkgFiles::new(self.file_filter.deb.clone());
+        dpkg_obj.get_packages();
+        self.packages.extend(dpkg_obj.packages);
     }
 }
