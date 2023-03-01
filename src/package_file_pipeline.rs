@@ -3,6 +3,7 @@ use crate::Package;
 use crate::PkgJson;
 use crate::Python;
 use crate::Rust;
+use crate::Yarn;
 
 pub struct PackageFilePipeline {
     file_filter: FileFilter,
@@ -33,6 +34,7 @@ impl PackageFilePipeline {
         self.python();
         self.rust();
         self.pkg_json();
+        self.yarn();
     }
 
     fn python(&mut self) {
@@ -51,5 +53,11 @@ impl PackageFilePipeline {
         let mut pkg_json_obj = PkgJson::new(self.file_filter.package_json.clone());
         pkg_json_obj.get_packages();
         self.packages.extend(pkg_json_obj.packages);
+    }
+
+    fn yarn(&mut self) {
+        let mut yarn_obj = Yarn::new(self.file_filter.yarn_lock.clone());
+        yarn_obj.get_packages();
+        self.packages.extend(yarn_obj.packages);
     }
 }

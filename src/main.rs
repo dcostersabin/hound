@@ -14,6 +14,7 @@ mod python;
 mod rpm;
 mod rust;
 mod system_pipeline;
+mod yarn;
 
 use apk::Apk;
 use arch::Arch;
@@ -32,6 +33,7 @@ use rpm::Rpm;
 use rust::Rust;
 use serde_json::to_string;
 use system_pipeline::SystemPipeline;
+use yarn::Yarn;
 
 #[derive(Parser)]
 #[command(author,version,about,long_about=None)]
