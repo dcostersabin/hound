@@ -1,5 +1,6 @@
 use crate::FileFilter;
 use crate::Go;
+use crate::Jar;
 use crate::Package;
 use crate::PkgJson;
 use crate::Python;
@@ -37,6 +38,7 @@ impl PackageFilePipeline {
         self.pkg_json();
         self.yarn();
         self.go();
+        self.jar();
     }
 
     fn python(&mut self) {
@@ -67,5 +69,11 @@ impl PackageFilePipeline {
         let mut go_obj = Go::new(self.file_filter.go.clone());
         go_obj.get_packages();
         self.packages.extend(go_obj.packages);
+    }
+
+    fn jar(&mut self) {
+        let mut jar_obj = Jar::new(self.file_filter.jar.clone());
+        jar_obj.get_packages();
+        self.packages.extend(jar_obj.packages);
     }
 }
