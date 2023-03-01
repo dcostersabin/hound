@@ -1,4 +1,5 @@
 use crate::ApkFiles;
+use crate::CSharpFiles;
 use crate::ComposerFiles;
 use crate::DpkgFiles;
 use crate::FileFilter;
@@ -51,6 +52,7 @@ impl PackageFilePipeline {
         self.pom();
         self.gem();
         self.composer();
+        self.csharp();
     }
 
     fn python(&mut self) {
@@ -123,5 +125,11 @@ impl PackageFilePipeline {
         let mut composer_obj = ComposerFiles::new(self.file_filter.composer.clone());
         composer_obj.get_packages();
         self.packages.extend(composer_obj.packages);
+    }
+
+    fn csharp(&mut self) {
+        let mut csharp_obj = CSharpFiles::new(self.file_filter.cs_proj.clone());
+        csharp_obj.get_packages();
+        self.packages.extend(csharp_obj.packages);
     }
 }
