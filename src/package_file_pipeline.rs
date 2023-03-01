@@ -1,6 +1,7 @@
 use crate::ApkFiles;
 use crate::DpkgFiles;
 use crate::FileFilter;
+use crate::GemFiles;
 use crate::Go;
 use crate::Jar;
 use crate::Package;
@@ -47,6 +48,7 @@ impl PackageFilePipeline {
         self.rpm();
         self.apk();
         self.pom();
+        self.gem();
     }
 
     fn python(&mut self) {
@@ -107,5 +109,11 @@ impl PackageFilePipeline {
         let mut pom_obj = PomFiles::new(self.file_filter.pom.clone());
         pom_obj.get_packages();
         self.packages.extend(pom_obj.packages);
+    }
+
+    fn gem(&mut self) {
+        let mut gem_obj = GemFiles::new(self.file_filter.gem.clone());
+        gem_obj.get_packages();
+        self.packages.extend(gem_obj.packages);
     }
 }
