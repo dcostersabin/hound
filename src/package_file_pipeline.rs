@@ -1,4 +1,5 @@
 use crate::ApkFiles;
+use crate::ComposerFiles;
 use crate::DpkgFiles;
 use crate::FileFilter;
 use crate::GemFiles;
@@ -49,6 +50,7 @@ impl PackageFilePipeline {
         self.apk();
         self.pom();
         self.gem();
+        self.composer();
     }
 
     fn python(&mut self) {
@@ -115,5 +117,11 @@ impl PackageFilePipeline {
         let mut gem_obj = GemFiles::new(self.file_filter.gem.clone());
         gem_obj.get_packages();
         self.packages.extend(gem_obj.packages);
+    }
+
+    fn composer(&mut self) {
+        let mut composer_obj = ComposerFiles::new(self.file_filter.composer.clone());
+        composer_obj.get_packages();
+        self.packages.extend(composer_obj.packages);
     }
 }
