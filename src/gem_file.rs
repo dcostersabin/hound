@@ -39,7 +39,7 @@ impl GemFiles {
                         }
                         let mut name = String::new();
                         let mut version = String::new();
-                        if line.contains("gem") {
+                        if line.contains("gem") && !line.contains("source") {
                             let filter_line = line.replace("gem ", "");
                             let name_line = filter_line.replace("'", "").replace('"', "");
                             let line_split: Vec<&str> = name_line.split(",").collect();
@@ -49,7 +49,7 @@ impl GemFiles {
                                 let re_match = version_re.find(&line);
 
                                 if !re_match.is_some() {
-                                    continue;
+                                    version = "N/A".to_string();
                                 } else {
                                     version = re_match
                                         .unwrap()
@@ -60,6 +60,9 @@ impl GemFiles {
                                         .trim()
                                         .to_string();
                                 }
+                            } else {
+                                name = name_line.trim().to_string();
+                                version = "N/A".to_string();
                             }
 
                             if !name.is_empty() & !version.is_empty() {
