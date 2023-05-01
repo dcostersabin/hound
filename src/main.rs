@@ -59,9 +59,6 @@ use yarn::Yarn;
 struct Cli {
     #[command(subcommand)]
     command: Commands,
-
-    #[arg(short, long)]
-    system: bool,
 }
 
 #[derive(Subcommand)]
@@ -71,6 +68,9 @@ enum Commands {
 
 #[derive(Args)]
 struct DetectArgs {
+    #[arg(short, long)]
+    system: bool,
+
     path: Option<String>,
 }
 
@@ -88,13 +88,13 @@ async fn main() {
     let cli = Cli::parse();
 
     match &cli.command {
-        Commands::Detect(path) => {
-            if cli.system {
+        Commands::Detect(args) => {
+            if args.system {
                 let mut sys_obj = SystemPipeline::new();
                 sys_obj.start().await;
                 print_json(&sys_obj.packages);
             } else {
-                match path.path.as_ref() {
+                match args.path.as_ref() {
                     Some(path) => {
                         let mut package_file_obj = PackageFilePipeline::new(path);
                         package_file_obj.start();
